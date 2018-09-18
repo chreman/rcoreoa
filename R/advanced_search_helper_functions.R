@@ -4,7 +4,8 @@ max_year_default <- yearToday <- format(Sys.Date(), "%Y")
 get_acceptable_advanced_search_query_filter <- function(){
   return(c("all_of_the_words", "exact_phrase", "at_least_one_of_the_words",
            "without_the_words", "find_those_words", "author", "publisher",
-           "repository", "doi", "year_from", "year_to", "language"))
+           "repository", "doi", "year_from", "year_to", "language",
+           "exists"))
 }
 
 paste_three <- function(..., sep = " ", collapse = NULL, na.rm = TRUE) {
@@ -47,6 +48,14 @@ prepare_elasticsearch_languageFilter <- function(filter, filterName) {
       filterArr <- unlist(strsplit(x = filter, split = " "))
       return(paste(filterName, ":", filter, sep = ""))
     }
+  } else {
+    return(NA)
+  }
+}
+
+prepare_elasticsearch_existsFilter <- function(filter) {
+  if (!is.na(filter)) {
+    return(paste0("_exists_:(", filter, ")"))
   } else {
     return(NA)
   }
@@ -206,6 +215,8 @@ parse_advanced_search_query <- function(query){
       prepare_elasticsearch_term(query["repository"], "repository")
     languageFilter <-
       prepare_elasticsearch_languageFilter(query["language"], "language.name")
+    existsFilter <-
+      prepare_elasticsearch_existsFilter(query["exists"])
 
     basicTermReplacement <- paste_three(basicTermReplacement, yearFilter,
                                         publisherFilter, repositoryFilter,
