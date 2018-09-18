@@ -221,7 +221,7 @@ parse_advanced_search_query <- function(query){
     basicTermReplacement <- paste_three(basicTermReplacement, yearFilter,
                                         publisherFilter, repositoryFilter,
                                         authorFilter, languageFilter,
-                                        existsFilter
+                                        existsFilter,
                                         sep = " AND ")
 
     return(basicTermReplacement)
