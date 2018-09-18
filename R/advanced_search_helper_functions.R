@@ -55,7 +55,7 @@ prepare_elasticsearch_languageFilter <- function(filter, filterName) {
 
 prepare_elasticsearch_existsFilter <- function(filter) {
   if (!is.na(filter)) {
-    return(paste0("_exists_:(", filter, ")"))
+    return(paste0("exists:", filter))
   } else {
     return(NA)
   }
